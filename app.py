@@ -1,4 +1,6 @@
-# Seu código aqui
+from flask import Flask, jsonify, request
+
+
 produtos = [
     {"id": 1, "name": "sabonete", "price": 5.99},
     {"id": 2, "name": "perfume", "price": 39.90},
@@ -31,3 +33,27 @@ produtos = [
     {"id": 29, "name": "coberta", "price": 55.99},
     {"id": 30, "name": "sofa", "price": 600.15}
 ]
+
+app = Flask(__name__)
+
+
+
+###    Rota de listagem    
+
+@app.get('/products')
+def list_products():
+    return jsonify(produtos), 200
+
+
+###    Rota de obtenção de um produto único 
+
+@app.get('/products/<int:product_id>')
+def get(product_id: int):
+        return jsonify(produtos[product_id -1]), 200
+
+###     Rota de criação de produto
+
+@app.post("/products")
+def create():
+    data = request.get_json()
+    new_product = [data.get('id'), data.get('name'), data.get('price')]
