@@ -37,7 +37,6 @@ produtos = [
 app = Flask(__name__)
 
 
-
 ###    Rota de listagem    
 
 @app.get('/products')
@@ -47,13 +46,39 @@ def list_products():
 
 ###    Rota de obtenção de um produto único 
 
-@app.get('/products/<int:product_id>')
+@app.get('/products/<int:product_id>') 
 def get(product_id: int):
         return jsonify(produtos[product_id -1]), 200
+        
 
 ###     Rota de criação de produto
 
 @app.post("/products")
 def create():
     data = request.get_json()
-    new_product = [data.get('id'), data.get('name'), data.get('price')]
+    print('olhaaaaaaaaaa aqui', data)
+    #new_product_id = request.args.get('id')        PRA Q Q SERVE???
+    new_product_name = data.get('name')
+    new_product_price = data.get('price')
+    produtos.append(data)
+    return {'id': len(produtos), 'name': new_product_name, 'price':new_product_price}, 201
+
+
+###    Rota de atualização de um produto
+
+@app.patch('/products/<int:product_id>')
+def update(product_id: int):
+    product = produtos[product_id - 1]
+    data = request.get_json()
+    update_name = data.get('name')
+    product['name'] = update_name
+    return '', 204
+
+
+###     Rota de deleção de um produto
+
+@app.delete('/products/<int:product_id>')
+def delete(product_id: int): 
+    # product = produtos[product_id - 1]
+    produtos.pop(product_id - 1)
+    return '', 204
