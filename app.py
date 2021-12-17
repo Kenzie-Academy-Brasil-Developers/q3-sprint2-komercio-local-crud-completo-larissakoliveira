@@ -1,4 +1,6 @@
-# Seu código aqui
+from flask import Flask, jsonify, request
+
+
 produtos = [
     {"id": 1, "name": "sabonete", "price": 5.99},
     {"id": 2, "name": "perfume", "price": 39.90},
@@ -31,3 +33,49 @@ produtos = [
     {"id": 29, "name": "coberta", "price": 55.99},
     {"id": 30, "name": "sofa", "price": 600.15}
 ]
+
+app = Flask(__name__)
+
+
+###    Rota de listagem    
+
+@app.get('/products')
+def list_products():
+    return jsonify(produtos), 200
+
+
+###    Rota de obtenção de um produto único 
+
+@app.get('/products/<int:product_id>') 
+def get(product_id: int):
+        return jsonify(produtos[product_id -1]), 200
+        
+
+###     Rota de criação de produto
+
+@app.post("/products")
+def create():
+    data = request.get_json()
+    new_product_name = data.get('name')
+    new_product_price = data.get('price')
+    produtos.append(data)
+    return {'id': len(produtos), 'name': new_product_name, 'price':new_product_price}, 201
+
+
+###    Rota de atualização de um produto
+
+@app.patch('/products/<int:product_id>')
+def update(product_id: int):
+    product = produtos[product_id - 1]
+    data = request.get_json()
+    update_name = data.get('name')
+    product['name'] = update_name
+    return '', 204
+
+
+###     Rota de deleção de um produto
+
+@app.delete('/products/<int:product_id>')
+def delete(product_id: int): 
+    produtos.pop(product_id - 1)
+    return '', 204
