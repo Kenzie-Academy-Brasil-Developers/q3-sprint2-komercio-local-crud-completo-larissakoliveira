@@ -56,8 +56,6 @@ def get(product_id: int):
 @app.post("/products")
 def create():
     data = request.get_json()
-    print('olhaaaaaaaaaa aqui', data)
-    #new_product_id = request.args.get('id')        PRA Q Q SERVE???
     new_product_name = data.get('name')
     new_product_price = data.get('price')
     produtos.append(data)
@@ -79,6 +77,5 @@ def update(product_id: int):
 
 @app.delete('/products/<int:product_id>')
 def delete(product_id: int): 
-    # product = produtos[product_id - 1]
     produtos.pop(product_id - 1)
     return '', 204
